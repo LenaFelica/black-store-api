@@ -1,6 +1,7 @@
 .home {
    position: relative;
    flex-grow: 1;
+   
  }
  
  .title {
@@ -8,7 +9,7 @@
    font-size: 119px;
    line-height: 145px;
    text-transform: uppercase;
-   color: var(--bg);
+   color: #5e5e65fa;
    text-align: center;
  }
  
@@ -24,7 +25,7 @@
    line-height: 20px;
    text-transform: uppercase;
    color: var(--sea);
- }
+    }
  
  .head {
    font-weight: 700;
