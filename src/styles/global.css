@@ -1,12 +1,13 @@
 body {
+   
    background: var(--bg);
    font-size: 16px;
    line-height: 16px;
    font-family: Montserrat, Roboto, sans-serif;
    padding: 0;
    margin: 0;
-   /* overflow-x: hidden; */
-   overflow: auto;
+   overflow-x: hidden;
+   /* overflow: auto; */
    color: #fff;
    font-weight: 500;
    padding-bottom: 20px;

@@ -3,7 +3,6 @@ import axios from "axios";
 
 import { BASE_URL } from "../../utils/constants";
 
-
 export const getProducts = createAsyncThunk(
    'produts/getProducts', 
    async(_, thunkAPI) => {
@@ -16,14 +15,18 @@ export const getProducts = createAsyncThunk(
       }
 })
 
-//* если прописать как ниже, то можно не оборачивать в try/catch выше
 const productsSlice = createSlice({
    name: 'products',
    initialState: {
       list: [],
-      // filtered: [],
+      filtered: [],
       // related: [],
       isLoading: false
+   },
+   reducers: {
+      filterByPrice: (state, { payload }) => {
+         state.filtered = state.list.filter(({ price }) => price < payload)
+      },
    },
    extraReducers: (builder) => {
       builder.addCase(getProducts.pending, (state) => {
@@ -38,5 +41,7 @@ const productsSlice = createSlice({
       });
    },
 });
+
+export const { filterByPrice } = productsSlice.actions;
 
 export default productsSlice.reducer;
