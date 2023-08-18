@@ -1,5 +1,4 @@
 body {
-   
    background: var(--bg);
    font-size: 16px;
    line-height: 16px;
@@ -58,7 +57,7 @@ body {
  }
  
  .app {
-   width: 1274px;
+   max-width: 1274px;
    margin: 0 auto;
  }
  
@@ -77,8 +76,6 @@ body {
  }
  
  .container {
-   /* display: flex;
-   flex-wrap: wrap; */
    gap: 20px;
    display: flex;
    flex-wrap: wrap;

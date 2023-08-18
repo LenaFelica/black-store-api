@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 
 import { useParams, useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ const SingleProduct = () => {
   const dispatch = useDispatch(); 
   const { id } = useParams();
   const navigate = useNavigate();
+  const { list, related } = useSelector(({ products }) => products)
 
   const { data, isLoading, isFetching, isSuccess } = useGetProductQuery({ id });
 
@@ -26,17 +27,17 @@ const SingleProduct = () => {
   }, [isLoading, isFetching, isSuccess]);
 
   useEffect(() => {
-      if(data) {
-         dispatch(getRelatedProducts(data.category.id))
-      }
-  }, [data])
+      if(!data || !list.length) return;
+
+      dispatch(getRelatedProducts(data.category.id));
+  }, [data, dispatch, list.length])
 
 
   return !data ?  (
   <section className='preloader'>Loading...</section>
   ) : ( <>
           <Product {...data} />
-          {/* <Products products={data} amount={5} title="Trending" /> */}
+          <Products products={related} amount={5} title="Related products" />
         </>
   );
   

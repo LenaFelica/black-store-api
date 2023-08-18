@@ -5,8 +5,26 @@ import { ROUTES } from '../../utils/routes';
 
 import LOGO from "../../images/logo.svg";
 import AVATAR from "../../images/avatar.jpg";
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleForm } from '../../features/user/userSlice';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Header = () => {
+  const dispatch = useDispatch()
+  const { currentUser } = useSelector(({ user }) => user)
+ 
+  const [values, setValues] = useState({ name: "Guest", avatar: AVATAR });
+  
+  useEffect(() => {
+     if (!currentUser) return;
+     setValues(currentUser);
+  }, [currentUser])
+
+  const handleClick = () => {
+     if(!currentUser) dispatch(toggleForm(true))
+  }
+
   return (
     <div className={styles.header}>
       <div className={styles.logo}>
@@ -16,12 +34,8 @@ const Header = () => {
       </div>
 
       <div className={styles.info}>
-         <div className={styles.user}>
-            <div className={styles.avatar} style={{ backgroundImage: `url(${AVATAR})`}} />
-            <div className={styles.username}>Guest</div>
-         </div>
 
-         <form className={styles.form}>
+        <form className={styles.form}>
             <div className={styles.icon}>
              <svg className="icon">
                <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#search`} />
@@ -34,12 +48,17 @@ const Header = () => {
                   placeholder="Search for anything.."
                   autoComplete='off'
                   onChange={() => {}}
-                  value=" "
+                  value=""
                />
             </div>
 
             {false && <div className={styles.box}></div>}
          </form>
+
+         <div className={styles.user} onClick={handleClick} >
+            <div className={styles.avatar} style={{ backgroundImage: `url(${values.avatar})`}} />
+            <div className={styles.username}>{values.name}</div>
+         </div>
 
          <div className={styles.account}>
             <Link to={ROUTES.HOME} className={styles.favourites}>
@@ -55,6 +74,8 @@ const Header = () => {
                <span className={styles.count}>2</span>
             </Link>
          </div>
+
+
 
       </div>
     </div>
