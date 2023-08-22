@@ -1,10 +1,9 @@
 
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "../../utils/constants";
 
-//* создади функцию, которая буде отвечаь за регистрацию пользователя
+//* регистрация пользователя
 export const createUser = createAsyncThunk(
    'users/createUser', 
    async(payload, thunkAPI) => {
@@ -25,11 +24,25 @@ export const loginUser = createAsyncThunk(
          const response = await axios.post(`${BASE_URL}/auth/login`, payload);
          const login = await axios (`${BASE_URL}/auth/profile`, {
             headers: {
-               Authorization: `Bearer ${response.access_token}`
+               Authorization: `Bearer ${response.data.access_token}`
             }
          });
          
          return login.data;
+      } catch(err) {
+         console.log(err)
+         return thunkAPI.rejectWithValue(err)
+      }
+  }
+);
+
+//* update user
+export const updateUser = createAsyncThunk(
+   'users/updateUser', 
+   async(payload, thunkAPI) => {
+      try{
+         const response = await axios.put(`${BASE_URL}/users/${payload.id}`, payload);
+         return response.data;
       } catch(err) {
          console.log(err)
          return thunkAPI.rejectWithValue(err)
@@ -55,6 +68,7 @@ const userSlice = createSlice({
          let newCart = [...state.cart];
 
          const found = state.cart.find(({ id }) => id === payload.id)
+
          if(found) {
             newCart = newCart.map((item) => {
                return item.id === payload.id ? {...item, quantity: payload.quantity || item.quantity + 1 } : item;
@@ -71,14 +85,9 @@ const userSlice = createSlice({
       }
    },
    extraReducers: (builder) => {
-      // builder.addCase(getUsers.pending, (state) => {
-      //    state.isLoading = true;
-      // });
       builder.addCase(createUser.fulfilled, addCurrentUser);
       builder.addCase(loginUser.fulfilled, addCurrentUser);
-      // builder.addCase(getUsers.rejected, (state) => {
-      //    state.isLoading = false;
-      // });
+      builder.addCase(updateUser.fulfilled, addCurrentUser);
    },
 });
 

@@ -39,7 +39,7 @@ const UserLoginForm = ({ closeForm, toggleCurrentFormType}) => {
         </svg>
       </div>
 
-      <div className={styles.title}>Sign Up</div>
+      <div className={styles.title}>Log In</div>
 
       <form className={styles.form} onSubmit={handleSubmit} >
          <div className={styles.group}>
@@ -68,8 +68,7 @@ const UserLoginForm = ({ closeForm, toggleCurrentFormType}) => {
 
 
         <div className={styles.link} 
-             onClick={() => toggleCurrentFormType("singup")}
-
+             onClick={() => toggleCurrentFormType("signup")}
          >
              Create an accaunt       
           </div>

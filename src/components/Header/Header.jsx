@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from '../../styles/Header.module.css'
 import { ROUTES } from '../../utils/routes';
 
@@ -12,6 +12,9 @@ import { useEffect } from 'react';
 
 const Header = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const [searchValue, setSearchValue] = useState("")
   const { currentUser } = useSelector(({ user }) => user)
  
   const [values, setValues] = useState({ name: "Guest", avatar: AVATAR });
@@ -23,6 +26,11 @@ const Header = () => {
 
   const handleClick = () => {
      if(!currentUser) dispatch(toggleForm(true))
+     else navigate(ROUTES.PROFILE)
+  }
+
+  const handleSearch = ({ target: { value }}) => {
+   setSearchValue(value)
   }
 
   return (
@@ -47,8 +55,8 @@ const Header = () => {
                   name="search" 
                   placeholder="Search for anything.."
                   autoComplete='off'
-                  onChange={() => {}}
-                  value=""
+                  onChange={handleSearch}
+                  value={searchValue}
                />
             </div>
 
@@ -62,9 +70,9 @@ const Header = () => {
 
          <div className={styles.account}>
             <Link to={ROUTES.HOME} className={styles.favourites}>
-            <svg className={styles["icon-fav"]}>
-              <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#heart`} />
-            </svg>
+               <svg className={styles["icon-fav"]}>
+                 <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#heart`} />
+               </svg>
             </Link>
 
             <Link to={ROUTES.CART} className={styles.cart}>
@@ -74,9 +82,6 @@ const Header = () => {
                <span className={styles.count}>2</span>
             </Link>
          </div>
-
-
-
       </div>
     </div>
   )

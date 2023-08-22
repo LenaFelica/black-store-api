@@ -25,7 +25,7 @@ const UserSingupForm = ({ closeForm, toggleCurrentFormType }) => {
    const handleSubmit = (e) => {
       e.prevetDefault(); 
       //* some - cheking values(name, email, password)
-      const isNotEmpty = Object.values(values).every(val => val)
+      const isNotEmpty = Object.values(values).every((val) => val)
       if(!isNotEmpty) return;
 
       dispatch(createUser(values))
@@ -78,7 +78,7 @@ const UserSingupForm = ({ closeForm, toggleCurrentFormType }) => {
             required
           />
         </div>
-        <div className={styles.group}>
+        {/* <div className={styles.group}>
           <input
             type="avatar"
             name="avatar"
@@ -88,7 +88,7 @@ const UserSingupForm = ({ closeForm, toggleCurrentFormType }) => {
             onChange={handleChange}
             required
           />
-        </div>
+        </div> */}
 
         <div className={styles.link} 
              onClick={() => toggleCurrentFormType("login")}
