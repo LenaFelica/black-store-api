@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toggleForm } from '../../features/user/userSlice';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useGetProductsQuery } from '../../features/api/apiSlice';
 
 const Header = () => {
   const dispatch = useDispatch()
@@ -18,7 +19,10 @@ const Header = () => {
   const { currentUser } = useSelector(({ user }) => user)
  
   const [values, setValues] = useState({ name: "Guest", avatar: AVATAR });
-  
+
+  const { data, isLoading} = useGetProductsQuery({ title: searchValue});
+  console.log(data);
+
   useEffect(() => {
      if (!currentUser) return;
      setValues(currentUser);
@@ -60,7 +64,27 @@ const Header = () => {
                />
             </div>
 
-            {false && <div className={styles.box}></div>}
+            {searchValue && <div className={styles.box}>
+               {isLoading ? 'Loading' : !data.length ? "No results" : (
+                  data.map(({title, images, id}) => {
+                     return (
+                        <Link 
+                           to={`/products/${id}`}
+                           className={styles.item}
+                           onClick={() => setSearchValue("")}
+                           key={id}
+                        >
+                           <div 
+                              className={styles.image}
+                              styles={{ backgroundImage: `url(${images[0]})`}}
+                           />
+
+                           <div className={styles.title}>{title}</div>
+                        </Link>
+                     )
+                  })
+               )}
+            </div>}
          </form>
 
          <div className={styles.user} onClick={handleClick} >
