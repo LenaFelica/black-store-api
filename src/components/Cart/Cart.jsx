@@ -1,14 +1,25 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addItemToCart, removeItemFromCart } from "../../features/user/userSlice";
 
 import styles from "../../styles/Cart.module.css";
+import { sumBy } from "../../utils/common";
 
 const Cart = () => {
+  const dispatch = useDispatch() 
   const { cart } = useSelector(({ user }) => user);
+
+const changeQuantity = (item, quantity) => {
+   dispatch(addItemToCart({ ...item, quantity}));
+}  
+
+const removeItem = (id) => {
+   dispatch(removeItemFromCart(id))
+}
 
   return (
     <section className={styles.cart}>
-      <h2 className={styles.title}>Your SingleCategory</h2>
+      <h2 className={styles.title}>Your Cart</h2>
 
       {!cart.length ? (
         <div className={styles.empty}>Here is empty</div>
@@ -32,7 +43,7 @@ const Cart = () => {
                 <div className={styles.price}>${price}</div>
 
                 <div className={styles.quantity}>
-                  <div className={styles.minus}>
+                  <div className={styles.minus} onClick={() => changeQuantity(item, Math.max(1, quantity - 1))} >
                     <svg className="icon">
                       <use
                         xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#minus`}
@@ -42,7 +53,7 @@ const Cart = () => {
 
                   <span>{quantity}</span>
 
-                  <div className={styles.plus}>
+                  <div className={styles.plus} onClick={() => changeQuantity(item, Math.max(1, quantity + 1))}>
                     <svg className="icon">
                       <use
                         xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#plus`}
@@ -53,7 +64,7 @@ const Cart = () => {
 
                 <div className={styles.total}>${price *  quantity}</div>
                
-               <div className={styles.close}>
+               <div className={styles.close} onClick={() => removeItem(item.id)}>
                     <svg className="icon">
                       <use
                         xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#close`}
@@ -69,7 +80,7 @@ const Cart = () => {
            <div className={styles.total}>
                TOTAL PRICE: {" "}
                <span>
-                  ${sumBy(({quantity, price}) => quantity * price )}
+                  ${sumBy(cart.map(({quantity, price}) => quantity * price ))}
                </span>
            </div>
 
